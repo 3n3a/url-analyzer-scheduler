@@ -10,12 +10,14 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
-	"assets": {
-		"binding": "ASSETS",
-		"directory": "./public"
-	},
 	"observability": {
 		"enabled": true
+	},
+	"triggers": {
+		/**
+		* Run every day at midnight
+		*/
+		"crons": ["0 0 * * *"]
 	}
 	/**
 	 * Smart Placement

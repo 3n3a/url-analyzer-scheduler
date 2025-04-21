@@ -39,20 +39,16 @@ export class PocketBaseClient {
             filter: '(notes:lower = "" || notes:lower ~ "this link provides information about")',
         });
     }
-    
-    async updateLinksWithMissingSummary(links: Link[]) {
+
+    async updateLinkWithMissingSummary(link: Link) {
+        // make sure new tags exist
         this.tags = await this.getTags();
         const nonExistantTags: string[] = [];
 
-        
-        // make sure all the new tags exist
-        for (const link of links) {
-            if (!link.changed) return;
-            
-            const currentNonExistantTags = link.tags
-                .filter((tagName: string) => this.tags.find((el) => el.name === tagName.toLowerCase()) === undefined)
-            nonExistantTags.push(...currentNonExistantTags);
-        }
+        if (!link.changed) return;    
+        const currentNonExistantTags = link.tags
+            .filter((tagName: string) => this.tags.find((el) => el.name === tagName.toLowerCase()) === undefined)
+        nonExistantTags.push(...currentNonExistantTags);
 
         const tagBatch = this.client.createBatch();
         nonExistantTags.forEach((tagName) => {
@@ -66,23 +62,20 @@ export class PocketBaseClient {
 
         this.tags = await this.getTags();
 
-        // update all the links
-        const batch = this.client.createBatch();
-        for (const link of links) {
-            if (!link.changed) return;
-
-            const tagIds = link.tags
+        // transform tag names into tag ids
+        const tagIds = link.tags
                 .map((tagName) => this.tags.find((el) => el.name === tagName.toLowerCase()))
                 .filter((el) => !!el)
                 .map((tag) => tag.id);
 
-            batch.collection('links').update(link.id, {
-                title: link.title,
-                notes: link.notes,
-                tags: tagIds,
-            })
-        }
+        // update link
+        const linkUpdateResponse = await this.client.collection('links').update(link.id, {
+            title: link.title,
+            notes: link.notes,
+            tags: tagIds,
+        })
 
-        return batch.send();
+        console.log('link updated: ', linkUpdateResponse.id);
+        return true;
     }
 }

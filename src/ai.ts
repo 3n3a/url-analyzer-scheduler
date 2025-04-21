@@ -17,5 +17,4 @@ export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url:
         body: JSON.stringify({ url: url }),
     });
     return response.json<AiLinkSummary>();
-    
 }

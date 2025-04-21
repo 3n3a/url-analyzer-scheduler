@@ -6,7 +6,12 @@ export type AiLinkSummary = {
     tags: string[],
 };
 
-export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url: string) {
+export type AiLinkError = {
+    message: string,
+    status: number,
+}
+
+export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url: string): Promise<AiLinkSummary> {
     const response = await fetch(aiBaseUrl, {
         method: 'POST',
         headers: {
@@ -16,5 +21,11 @@ export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url:
         },
         body: JSON.stringify({ url: url }),
     });
+    
+    if (!response.ok) {
+        const output = await response.json<{ message: string }>();
+        throw new Error('failed to get summary for url: ' + url + '; reason: ' + output.message);
+    }
+    
     return response.json<AiLinkSummary>();
 }

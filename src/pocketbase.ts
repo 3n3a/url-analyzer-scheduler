@@ -36,7 +36,7 @@ export class PocketBaseClient {
     // These are placeholders for your actual implementation
     async getLinksWithMissingSummary() {
         return this.client.collection('links').getFullList<Link>({
-            filter: '(notes:lower = "" || notes:lower ~ "this link provides information about")',
+            filter: '(notes:lower = "" || notes:lower ~ "this link provides information about" || tags:length = 0)',
         });
     }
 

@@ -25,7 +25,7 @@ export default {
 			for (const linkWithMissingSummary of linksWithMissingSummary) {
 				try {
 					console.log('Starting updating link: ', linkWithMissingSummary.url);
-					const updatedLinkSummary = await getSummaryForUrl(env.AI_BASE_URL, env.AI_API_KEY, linkWithMissingSummary.url);
+					const updatedLinkSummary = await getSummaryForUrl(env, env.AI_BASE_URL, env.AI_API_KEY, linkWithMissingSummary.url);
 					const updatedLink = {
 						...linkWithMissingSummary,
 						title: updatedLinkSummary.title,

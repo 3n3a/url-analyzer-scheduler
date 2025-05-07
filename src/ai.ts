@@ -11,8 +11,8 @@ export type AiLinkError = {
     status: number,
 }
 
-export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url: string): Promise<AiLinkSummary> {
-    const response = await fetch(aiBaseUrl, {
+export async function getSummaryForUrl(env: Env, aiBaseUrl: string, aiApiKey: string, url: string): Promise<AiLinkSummary> {
+    const request = new Request(aiBaseUrl, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${aiApiKey}`,
@@ -21,7 +21,7 @@ export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url:
         },
         body: JSON.stringify({ url: url }),
     });
-
+    const response = await env.URL_ANALYZER.fetch(request);
 
     if (!response.ok) {
         const output = await response.json<{ message: string }>();

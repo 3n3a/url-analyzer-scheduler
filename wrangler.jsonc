@@ -7,18 +7,16 @@
 	"name": "url-analyzer-scheduler",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-19",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
 		"enabled": true
 	},
 	"triggers": {
 		/**
-		* Run every day at midnight
-		*/
+		 * Run every day at midnight
+		 */
 		"crons": ["0 0 * * *"]
-	}
+	},
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -52,5 +50,5 @@
 	 * Service Bindings (communicate between multiple Workers)
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
 	 */
-	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+	"services": [{ "binding": "URL_ANALYZER", "service": "url-analyzer" }]
 }

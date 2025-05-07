@@ -16,16 +16,19 @@ export async function getSummaryForUrl(aiBaseUrl: string, aiApiKey: string, url:
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${aiApiKey}`,
-            'Accepts': 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ url: url }),
     });
-    
+
+
     if (!response.ok) {
         const output = await response.json<{ message: string }>();
         throw new Error('failed to get summary for url: ' + url + '; reason: ' + output.message);
     }
-    
-    return response.json<AiLinkSummary>();
+
+    const json = await response.json();
+    console.log("got res: ", json);
+    return json as AiLinkSummary;
 }
